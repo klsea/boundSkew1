@@ -18,16 +18,21 @@ d1 <- d0[c(grep('ResponseId', colnames(d0)), grep('Age', colnames(d0)), grep('CT
 # remove incomplete records
 d1 <- d1[complete.cases(d1),]
 
-### ---------- ###
-### START HERE ###
-### ---------- ###
 # screen data based on response to catch trials - remove participants who do not answer consistently
+d3 <- d1[which(d1$CT1 == 1),]
+d4 <- d3[which(d3$CT2 == 2),]
+rm(d0,d1,d3)
+
+# remove catch trials
+d4$CT2 <- NULL
+d4$CT1 <- NULL
 
 # recode age into actual age
-d1$Age <- as.integer(as.character(d1$Age)) + 19
+d4$Age <- as.integer(as.character(d4$Age)) + 19
 
 # make data long
-d2 <- melt(d1, id.vars = c('ResponseId', 'Age'), variable.name = 'gamble')
+d2 <- melt(d4, id.vars = c('ResponseId', 'Age'), variable.name = 'gamble')
+rm(d4)
 
 # recode value into acceptance - 0 (for reject) and 1 (for accept)
 d2$accept <- as.numeric(d2$value) - 1
