@@ -2,6 +2,7 @@
 # KLS 1.11.19
 
 # import libraries and set working directory
+rm(list=ls())
 setwd('~/R_Projects/boundSkew1/data')
 library(reshape2)
 
@@ -12,10 +13,13 @@ d0 <- read.csv('Skew_boundary_raw_numeric.csv', na.strings = c('', 'NA'))
 d0 <- d0[3:nrow(d0),]
 
 # limit skew trials for now
-d1 <- d0[c(grep('ResponseId', colnames(d0)), grep('0_95_5', colnames(d0)):grep('n5_55_45', colnames(d0)) )]
+d1 <- d0[c(grep('ResponseId', colnames(d0)), grep('Age', colnames(d0)), grep('0_95_5', colnames(d0)):grep('n5_55_45', colnames(d0)) )]
 
 # remove incomplete records
 d1 <- d1[complete.cases(d1),]
+
+# recode age into actual age
+d1$Age <- as.integer(as.character(d1$Age)) + 19
 
 # make data long
 d2 <- melt(d1, id.vars = 'ResponseId', variable.name = 'gamble')
