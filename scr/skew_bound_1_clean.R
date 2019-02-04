@@ -22,7 +22,7 @@ d1 <- d1[complete.cases(d1),]
 d1$Age <- as.integer(as.character(d1$Age)) + 19
 
 # make data long
-d2 <- melt(d1, id.vars = 'ResponseId', variable.name = 'gamble')
+d2 <- melt(d1, id.vars = c('ResponseId', 'Age'), variable.name = 'gamble')
 
 # recode value into acceptance - 0 (for reject) and 1 (for accept)
 d2$accept <- as.numeric(d2$value) - 1
