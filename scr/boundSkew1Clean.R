@@ -13,10 +13,15 @@ d0 <- read.csv('Skew_boundary_raw_numeric.csv', na.strings = c('', 'NA'))
 d0 <- d0[3:nrow(d0),]
 
 # limit skew trials for now
-d1 <- d0[c(grep('ResponseId', colnames(d0)), grep('Age', colnames(d0)), grep('0_95_5', colnames(d0)):grep('n5_55_45', colnames(d0)) )]
+d1 <- d0[c(grep('ResponseId', colnames(d0)), grep('Age', colnames(d0)), grep('CT2', colnames(d0)):grep('CT1', colnames(d0)), grep('0_95_5', colnames(d0)):grep('n5_55_45', colnames(d0)), grep('Q134', colnames(d0)))]
 
 # remove incomplete records
 d1 <- d1[complete.cases(d1),]
+
+### ---------- ###
+### START HERE ###
+### ---------- ###
+# screen data based on response to catch trials - remove participants who do not answer consistently
 
 # recode age into actual age
 d1$Age <- as.integer(as.character(d1$Age)) + 19
@@ -56,6 +61,7 @@ d2$deg_skew[d2$v2 == 70 | d2$v2 == 30] <- 'Moderate'
 d2$deg_skew[d2$v2 == 65 | d2$v2 == 35] <- 'Weak'
 d2$deg_skew[d2$v2 == 60 | d2$v2 == 40] <- 'Weak'
 d2$deg_skew[d2$v2 == 55 | d2$v2 == 45] <- 'Weak'
+d2$deg_skew[d2$v2 == 50 | d2$v2 == 50] <- 'Symmetric'
 
 d2$v2 <- NULL
 
