@@ -68,6 +68,11 @@ d2$deg_skew[d2$v2 == 60 | d2$v2 == 40] <- 'Weak'
 d2$deg_skew[d2$v2 == 55 | d2$v2 == 45] <- 'Weak'
 d2$deg_skew[d2$v2 == 50 | d2$v2 == 50] <- 'Symmetric'
 
+# dir of skew (positive or negative)
+d2$v2 <- as.numeric(as.character(d2$v2))
+d2$dir_skew[d2$v2 > 50] <- 'Negative'
+d2$dir_skew[d2$v2 < 50] <- 'Positive'
+d2$dir_skew[d2$v2 == 50] <- 'Symmetric'
 d2$v2 <- NULL
 
 

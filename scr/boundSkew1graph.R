@@ -13,8 +13,13 @@ source('~/Dropbox (Personal)/Functions/SummarySE.R')
 dt <- read.csv('boundSkew1Long.csv')
 
 d0 <- na.omit(dt)
+# reorder deg_skew factor
 d0$deg_skew <- factor(d0$deg_skew, levels = c('Symmetric', 'Weak', 'Moderate', 'Strong'))
+# make magnitude a factor
 d0$magnitude <- factor(d0$magnitude)
+
+# only look at postive skew
+d0 <- d0[which(d0$dir_skew == 'Positive'),]
 
 # age effects on acceptance rates
 ggplot(d0, aes(Age, accept, colour = deg_skew, fill = deg_skew)) + geom_smooth(method=lm) +
