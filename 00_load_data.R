@@ -16,5 +16,5 @@ dt <- dt[-c(1:2),]
 dt$Age <- as.integer(as.character(dt$Age))
 dt$Age <- dt$Age + 19
 
-write.csv(dd, here("data", "bound_skew1_data_dictionary.csv"), row.names = FALSE)
+write.csv(dd, here("data", "bound_skew1_data_dictionary.csv"))
 write.csv(dt, here("data", "bound_skew1_data.csv"), row.names = FALSE)

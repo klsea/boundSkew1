@@ -5,7 +5,7 @@
 library(here)
 library(ggplot2)
 
-# load source functiozns
+# load source functions
 source(here('scr', 'isolate_skew.R'))
 source(here('scr', 'clean_skew.R'))
 source(here('scr', 'SummarySE.R'))
