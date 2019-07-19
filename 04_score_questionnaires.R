@@ -20,3 +20,4 @@ avi <- score_avi(avi)
 
 graph_lit <- isolate_measure2(dt, "How good", "When reading", dd)
 graph_lit <- add_graph_lit_labels(graph_lit, "How good", "When reading", dd)
+graph_lit <- score_graph_lit(graph_lit)
