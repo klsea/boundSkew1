@@ -44,7 +44,7 @@ isolate_measure2 <- function(data, first_term, last_term, datadict) {
   data[,c(9, f1:l1)]
 }
 
-add_graph_lit_labels <- function(measure, first_term, last_term, datadict ) {
+add_measure_labels <- function(measure, first_term, last_term, datadict ) {
   #isolate_measure2(graph_lit)# would be great to use this line if function can be auto input rather than typing out again
   fst <- as.data.frame(grep(first_term, datadict[,2]))
   lst <- as.data.frame(grep(last_term, datadict[,2]))
@@ -61,5 +61,3 @@ score_graph_lit <- function(data) {
   colnames(dt) <- c('SubID', 'graph_lit')
   return(dt)
 }
-
-

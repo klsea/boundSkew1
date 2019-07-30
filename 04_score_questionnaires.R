@@ -19,5 +19,10 @@ avi <- score_avi(avi)
 # Graph Literacy
 
 graph_lit <- isolate_measure2(dt, "How good", "When reading", dd)
-graph_lit <- add_graph_lit_labels(graph_lit, "How good", "When reading", dd)
+graph_lit <- add_measure_labels(graph_lit, "How good", "When reading", dd)#function would need to change to have simpler labels
 graph_lit <- score_graph_lit(graph_lit)
+
+# Numeracy 
+
+num <- isolate_measure2(dt, "Imagine that", "Suppose that", dd)
+num <- add_measure_labels(num, "Imagine that", "Suppose that", dd) #function would need to change to have simpler labels
