@@ -16,7 +16,7 @@ source(here('scr', 'SummarySE.R'))
 dt <- read.csv(here("data", "bound_skew1_data.csv"))
 
 # separate skew
-d0 <- isolate_skew(dt,c(9,12),20:79)
+d0 <- isolate_skew(dt,c(1,2),10:69)
 d1 <- clean_skew(d0)
 
 # recode response to acceptance
@@ -38,6 +38,7 @@ d2 <- summarySE(data=d1, measurevar = 'accept', groupvars='deg_skew')
 ggplot(d2, aes(deg_skew, accept, fill = deg_skew)) + geom_bar(position=position_dodge(), stat='identity') + 
   geom_errorbar(aes(ymin=accept - se, ymax = accept + se), width = .2, position=position_dodge(.9)) + 
   theme(legend.position = 'none')
+ggsave("deg_skew_plot.pdf", plot = last_plot(), device="pdf", path="output/")
 
 # create summary - add interaction with valence of gamble
 d3 <- summarySE(data=d1, measurevar = 'accept', groupvars=c('valence','deg_skew'))
@@ -53,9 +54,16 @@ ggplot(d4, aes(magnitude, accept, fill = deg_skew)) + geom_bar(position=position
   geom_errorbar(aes(ymin=accept - se, ymax = accept + se), width = .2, position=position_dodge(.9)) + 
   theme(legend.position = 'top')
 
+
 # create summary - 3 way interaction 
 d5 <- summarySE(data=d1, measurevar = 'accept', groupvars=c('valence', 'magnitude', 'deg_skew'))
 
 ggplot(d5, aes(valence, accept, fill = deg_skew)) + geom_bar(position=position_dodge(), stat='identity') + 
   geom_errorbar(aes(ymin=accept - se, ymax = accept + se), width = .2, position=position_dodge(.9)) + 
   theme(legend.position = 'top') + facet_wrap(~ magnitude)
+
+# create summary - interaction between magnitude and valence (w/o skew)
+d6 <- summarySE(data=d1, measurevar = 'accept', groupvars=c('valence', 'magnitude'))
+ggplot(d6, aes(magnitude, accept, fill = valence)) + geom_bar(position=position_dodge(), stat='identity') + 
+  geom_errorbar(aes(ymin=accept - se, ymax = accept + se), width = .2, position=position_dodge(.9)) + 
+  theme(legend.position = 'top')

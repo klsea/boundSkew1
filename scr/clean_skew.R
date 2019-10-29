@@ -1,7 +1,7 @@
 clean_skew <- function(data) {
   library(reshape2)
   # make long
-  d1 <- melt(data, id.vars = c('ResponseId','Age'), variable.name = 'gamble', value.name = 'response')
+  d1 <- melt(data, id.vars = c('ID','Age'), variable.name = 'gamble', value.name = 'response')
   d1$v1 <- as.factor(t(as.data.frame(strsplit(as.character(d1$gamble), '_')))[,1])
   
   # valence (gain/loss/neutral)
@@ -42,7 +42,7 @@ clean_skew <- function(data) {
  
   # remove incomplete trials
   d2 <- d1[complete.cases(d1),]
-  d3 <- d2[order(d2$ResponseId, d2$deg_skew),]
+  d3 <- d2[order(d2$ID, d2$deg_skew),]
   d4 <- d3[c(1:3,5:8,4)]
   
 }
