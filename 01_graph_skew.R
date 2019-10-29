@@ -1,4 +1,4 @@
-# score skew data
+# graph skew data
 # 6.10.19 KLS
 
 # load required packages
@@ -37,8 +37,9 @@ d2 <- summarySE(data=d1, measurevar = 'accept', groupvars='deg_skew')
 
 ggplot(d2, aes(deg_skew, accept, fill = deg_skew)) + geom_bar(position=position_dodge(), stat='identity') + 
   geom_errorbar(aes(ymin=accept - se, ymax = accept + se), width = .2, position=position_dodge(.9)) + 
-  theme(legend.position = 'none')
-ggsave("deg_skew_plot.pdf", plot = last_plot(), device="pdf", path="output/")
+  theme(legend.position = 'none') + theme_minimal() + guides(fill=FALSE) + xlab('Degree of Skewness') + 
+  ylab('Acceptance Rate')
+#ggsave("deg_skew_plot.pdf", plot = last_plot(), device="pdf", path="output/")
 
 # create summary - add interaction with valence of gamble
 d3 <- summarySE(data=d1, measurevar = 'accept', groupvars=c('valence','deg_skew'))
@@ -54,7 +55,6 @@ ggplot(d4, aes(magnitude, accept, fill = deg_skew)) + geom_bar(position=position
   geom_errorbar(aes(ymin=accept - se, ymax = accept + se), width = .2, position=position_dodge(.9)) + 
   theme(legend.position = 'top')
 
-
 # create summary - 3 way interaction 
 d5 <- summarySE(data=d1, measurevar = 'accept', groupvars=c('valence', 'magnitude', 'deg_skew'))
 
@@ -62,8 +62,22 @@ ggplot(d5, aes(valence, accept, fill = deg_skew)) + geom_bar(position=position_d
   geom_errorbar(aes(ymin=accept - se, ymax = accept + se), width = .2, position=position_dodge(.9)) + 
   theme(legend.position = 'top') + facet_wrap(~ magnitude)
 
-# create summary - interaction between magnitude and valence (w/o skew)
-d6 <- summarySE(data=d1, measurevar = 'accept', groupvars=c('valence', 'magnitude'))
-ggplot(d6, aes(magnitude, accept, fill = valence)) + geom_bar(position=position_dodge(), stat='identity') + 
+# create summary - interaction between magnitude and valence 
+
+# make interaction term
+d1$magval <- interaction(d1$valence, d1$magnitude)
+d1$magval <- drop.levels(d1$magval)
+d1$magval <- factor(d1$magval, levels = c('loss.5', 'loss.0.5', 'neutral.0', 'gain.0.5', 'gain.5'))
+levels(d1$magval)[1] <- '-$5.00'
+levels(d1$magval)[2] <- '-$0.50'
+levels(d1$magval)[3] <- '$0.00'
+levels(d1$magval)[4] <- '+$0.50'
+levels(d1$magval)[5] <- '+$5.00'
+
+d6 <- summarySE(data=d1, measurevar = 'accept', groupvars=c('magval', 'deg_skew'))
+
+ggplot(d6, aes(magval, accept, fill = deg_skew)) + geom_bar(position=position_dodge(), stat='identity') + 
   geom_errorbar(aes(ymin=accept - se, ymax = accept + se), width = .2, position=position_dodge(.9)) + 
-  theme(legend.position = 'top')
+  scale_fill_discrete(name = 'Degree of Skewness') + xlab('Valence by Magnitude Interaction') +
+  ylab('Acceptance Rate') + theme_minimal() +theme(legend.position = 'top') + expand_limits(y=1)
+
