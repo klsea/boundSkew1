@@ -1,6 +1,7 @@
 count_skew <- function(data) {
   # calculate individual difference score - count number of skew gambles acceptances 
   subs <- unique(data$ID)
+  data <- data[which(data$deg_skew != 0),]
   dt <- matrix(nrow = length(subs), ncol = 4)
   for (s in subs) {
     d0 <- data[which(data$ID == s),]

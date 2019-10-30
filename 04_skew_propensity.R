@@ -29,4 +29,5 @@ d2$skew_count_f <- ordered(d2$skew_count,
 d2$magval <- interaction(d2$valence, d2$magnitude)
 
 # examine distribution
+ggplot(d2, aes(skew_count_f)) + geom_histogram(stat='count', binwidth=.5, position="dodge")
 ggplot(d2, aes(skew_count_f, fill = magval)) + geom_histogram(stat='count', binwidth=.5, position="dodge")
