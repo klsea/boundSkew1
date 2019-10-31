@@ -39,7 +39,7 @@ ggplot(d2, aes(deg_skew, accept, fill = deg_skew)) + geom_bar(position=position_
   geom_errorbar(aes(ymin=accept - se, ymax = accept + se), width = .2, position=position_dodge(.9)) + 
   theme(legend.position = 'none') + theme_minimal() + guides(fill=FALSE) + xlab('Degree of Skewness') + 
   ylab('Acceptance Rate')
-#ggsave("deg_skew_plot.pdf", plot = last_plot(), device="pdf", path="output/")
+ggsave("deg_skew_plot1.pdf", plot = last_plot(), device="pdf", path="figs/")
 
 # create summary - add interaction with valence of gamble
 d3 <- summarySE(data=d1, measurevar = 'accept', groupvars=c('valence','deg_skew'))

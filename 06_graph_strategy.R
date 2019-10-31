@@ -39,10 +39,12 @@ ggplot(d1, aes(names, Mean, fill = names)) + geom_bar(stat='identity') +
   geom_errorbar(aes(ymin = Mean-SE, ymax = Mean + SE), width = .2, position=position_dodge(.9)) +
   theme_minimal() + theme(legend.position = 'none') + xlab("Strategy") + ylab('Average Rating') +
   expand_limits(y=c(1,5)) + geom_vline(aes(xintercept=2.5))
+ggsave('strategy1.pdf', path = 'figs/')
 
 # statistical tests
 # compare gut vs mathematical strategy
 gutvmath <- t.test(d0$gut, d0$math, paired = TRUE)
+saveRDS(gutvmath, here('output', 'gutvmath1.RDS'))
 
 # compare aspects of gamble
 d2 <- gather(d0, question, rating, win.money:lose.likely, factor_key = TRUE)[,c(1:2, 5:6)]
@@ -52,6 +54,7 @@ rownames(d3) <- NULL
 
 valvparam <- aov(rating ~ valence * parameter + Error(ID), data = d3)
 summary(valvparam)
+saveRDS(valvparam, here('output', 'valvparam1.RDS'))
 
 # Graph distributions
 gut_color <- colorize_variable(d0$gut)
