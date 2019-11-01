@@ -9,6 +9,7 @@ library(ggplot2)
 source(here('scr', 'isolate_skew.R'))
 source(here('scr', 'clean_skew.R'))
 source(here('scr', 'SummarySE.R'))
+source(here('scr', 'multiplot.R'))
 
 # set hard-coded variables
 
@@ -35,11 +36,10 @@ ggplot(d1, aes(Age, accept, colour = deg_skew, fill = deg_skew)) + geom_smooth(m
 # create summary - main effect of degree of skewness
 d2 <- summarySE(data=d1, measurevar = 'accept', groupvars='deg_skew')
 
-ggplot(d2, aes(deg_skew, accept, fill = deg_skew)) + geom_bar(position=position_dodge(), stat='identity') + 
+p1 <- ggplot(d2, aes(deg_skew, accept, fill = deg_skew)) + geom_bar(position=position_dodge(), stat='identity') + 
   geom_errorbar(aes(ymin=accept - se, ymax = accept + se), width = .2, position=position_dodge(.9)) + 
-  theme(legend.position = 'none') + theme_minimal() + guides(fill=FALSE) + xlab('Degree of Skewness') + 
-  ylab('Acceptance Rate')
-ggsave("deg_skew_plot1.pdf", plot = last_plot(), device="pdf", path="figs/")
+  theme_minimal() + xlab('Degree of Skewness') + ylab('Acceptance Rate') + expand_limits(y=1) + 
+  guides(fill=FALSE) 
 
 # create summary - add interaction with valence of gamble
 d3 <- summarySE(data=d1, measurevar = 'accept', groupvars=c('valence','deg_skew'))
@@ -76,8 +76,15 @@ levels(d1$magval)[5] <- '+$5.00'
 
 d6 <- summarySE(data=d1, measurevar = 'accept', groupvars=c('magval', 'deg_skew'))
 
-ggplot(d6, aes(magval, accept, fill = deg_skew)) + geom_bar(position=position_dodge(), stat='identity') + 
+p2 <- ggplot(d6, aes(magval, accept, fill = deg_skew)) + geom_bar(position=position_dodge(), stat='identity') + 
   geom_errorbar(aes(ymin=accept - se, ymax = accept + se), width = .2, position=position_dodge(.9)) + 
   scale_fill_discrete(name = 'Degree of Skewness') + xlab('Valence by Magnitude Interaction') +
-  ylab('Acceptance Rate') + theme_minimal() +theme(legend.position = 'top') + expand_limits(y=1)
+  theme_minimal() +theme(legend.position = 'none', axis.title.y = element_blank()) + expand_limits(y=1)
 
+p3 <- multiplot(p1, p2, layout = matrix(c(1,2,2,2), nrow=1, byrow=TRUE))
+
+#ggsave("deg_skew_plot1.pdf", plot = p3, device="pdf", path="figs/")
+
+pdf('figs/deg_skew_plot1.pdf')
+multiplot(p1, p2, layout = matrix(c(1,2,2,2), nrow=1, byrow=TRUE))
+dev.off()

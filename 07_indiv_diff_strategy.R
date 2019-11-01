@@ -41,11 +41,19 @@ s1_corr <- rcorr(as.matrix(d3[5:11]))
 saveRDS(s1_corr, here('output', 's1_corr.RDS'))
 
 # models
-m1 <- lm(skew_count ~ gut + valence + magnitude, data = d3)
+d3$magval <- interaction(d3$magnitude, d3$valence)
+m1 <- lm(skew_count ~ gut + magval, data = d3)
 summary(m1)
-m2 <- lm(skew_count ~ win.money + valence + magnitude, data = d3)
+m2 <- lm(skew_count ~ win.money + magval, data = d3)
 summary(m2)
-m3 <- lm(skew_count ~ lose.money + valence + magnitude, data = d3)
+m3 <- lm(skew_count ~ lose.money + magval, data = d3)
 summary(m3)
-m4 <- lm(skew_count ~ lose.likely + valence + magnitude, data = d3)
+m4 <- lm(skew_count ~ lose.likely + magval, data = d3)
 summary(m4)
+m5 <- lm(skew_count ~ math + magval, data = d3)
+summary(m5)
+m6 <- lm(skew_count ~ win.likely + magval, data = d3)
+summary(m6)
+
+
+
