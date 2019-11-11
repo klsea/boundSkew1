@@ -5,17 +5,18 @@ isolate_measure <- function(data, term, datadict) {
   data[,c(9,grep(term, datadict[,2]))]
 }
 
-add_correct_avi_labels <- function(avi, term, datadict) {
+add_correct_avi_labels <- function(avi, term1, term2, datadict) {
   # input: avi 
   # term = character
   # datadict = data dictionary with only 2 columns *UPDATE WHEN DATA DICT IS UPDATED
-  d0 <- as.character(datadict[grep(term, datadict[,2]),2])
+  qs <- as.character(dict$Question)
+  d0 <- as.character(datadict[grep(term1, qs):grep(term2, qs),2])
   d1 <- d0[1:6]
-  d1 <- gsub('Listed below are a number of words that describe feelings. Some of the feelings are very similar to\neach other, whereas others are very different from each other. Read each word and then select how\noften YOU ACTUALLY HAVE that feeling over the course of a typical week:\nOver the course of a typical week, I ACTUALLY feel… - ', '', d1)
+  d1 <- gsub('Listed below are a number of words that describe feelings. Some of the feelings are very similar to\neach other, whereas others are very different from each other. Read each word and then select how\noften YOU ACTUALLY HAVE that feeling over the course of a typical week:\nOver the course of a typical week, I ACTUALLY feel\211\333_ - ', '', d1)
   d2 <- d0[7:24]
-  d2 <- gsub("Over the course of a typical week, I ACTUALLY feel… - ", "", d2)
+  d2 <- gsub("Over the course of a typical week, I ACTUALLY feel\211\333_ - ", "", d2)
   d3 <- c(d1,d2)
-  colnames(avi) <- c('SubID', d3)
+  colnames(avi) <- c('ID', 'Age', d3)
   return(avi)
 }
 
@@ -28,7 +29,7 @@ score_avi <- function(avi) {
   avi$han <- (avi$Fearful + avi$Hostile + avi$Nervous) /3
   avi$ha <- (avi$Aroused + avi$Surprised + avi$Astonished) / 3
   #avi$neg <- (avi$Lonely + avi$Inactive + avi$Idle ) /3 # We don't think this is correct
-  return(avi[,c(1,26:31)])
+  return(avi[,c(1:2,27:32)])
 }
 
 isolate_measure2 <- function(data, first_term, last_term, datadict) {
@@ -37,8 +38,9 @@ isolate_measure2 <- function(data, first_term, last_term, datadict) {
   #first_term = first term in questionnaire section (character)
   #last_term = last term in questionnaire section (character)
   #datadict = data dictionary with only 2 columns *UPDATE WHEN DATA DICT IS UPDATED
-  first <- as.data.frame(grep(first_term, datadict[,2]))
-  last <- as.data.frame(grep(last_term, datadict[,2]))
+  datadict$Question <- as.character(datadict$Question)
+  first <- as.data.frame(grep(first_term, datadict$Question))
+  last <- as.data.frame(grep(last_term, datadict$Question))
   f1 <- first[1,]
   l1 <- last[length(last),]
   data[,c(9, f1:l1)]
@@ -62,4 +64,35 @@ score_graph_lit <- function(data) {
   return(dt)
 }
 
+hat_which_measure <- function(answers, response) {
+  rspn <- match(response, answers)
+  if(is.na(rspn)){
+    print('incorrect')
+  } else {
+    print('correct')
+  }
+}
+
+score_num <- function(num) {
+  QNAMES <- c("Q1","Q2","Q3", 'Q4', 'Q5','Q6','Q7','Q8a','Q8b', 'Q9', 'Q10','Q11','Q12','Q13','Q14')
+  Q1 <- c("half the time", "50%", 490:510, 1:2)
+  Q2 <- c("10", "10 people", "0.01", ".01", "1.00e+01")
+  Q3 <- c("0.1%", "0.1", '0.1000')
+  Q4 <- c(3)
+  Q5 <- c(2)
+  Q6 <- c(2, "2%", '2 out of 100', '2% in ten years', '2 percent', '1% in 5 years')
+  Q7 <- c(2, "2%", '2 out of 100', '2 in 100 years', '1 in 50 in ten years', '2 in a hundred', '2 in 100','2 of 100', '1 in 50', '2 in 100 in ten years')
+  Q8a <- c(10)
+  Q8b <- c(100)
+  Q9 <- c(20, '20%', '1 in 5', '1 in5')
+  Q10 <- c('5 people', '5.0e+00', 5)
+  Q11 <- c(1)
+  Q12 <- c('9/18', '1/2', '50%', '50 percent')
+  Q13 <- c(64, 64.00)
+  Q14 <- c(3)
+  
+  QNUMBS <- list(Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8a,Q8b,Q9,Q10,Q11,Q12,Q13,Q14);QNUMBS
+  num_ans_key <- data.frame(QNAMES, I(QNUMBS));num_ans_key
+  num_ans_key[1,2]
+}
 
