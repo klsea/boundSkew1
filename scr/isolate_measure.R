@@ -21,14 +21,14 @@ add_correct_avi_labels <- function(avi, term1, term2, datadict) {
 }
 
 score_avi <- function(avi) {
-  avi$hap <- (avi$Enthusiastic + avi$Excited + avi$Strong) / 3 
-  avi$lap <- (avi$Calm + avi$Relaxed + avi$Peaceful) / 3
+  avi$hap <- (avi$Enthusiastic + avi$Excited + avi$Strong + avi$Elated) / 4 
+  avi$lap <- (avi$Calm + avi$Relaxed + avi$Peaceful + avi$Serene) / 4
   avi$la <- (avi$Quiet + avi$Passive + avi$Still) / 3
-  #avi$pos <- (avi$Euphoric + avi$Elated + avi$Rested ) /3 # We don't think this is correct
+  #avi$pos <- (avi$Content + avi$Happy + avi$Satisfied ) /3 # Missing from one skew study?
   avi$lan <- (avi$Dull + avi$Sleepy + avi$Sluggish) / 3
   avi$han <- (avi$Fearful + avi$Hostile + avi$Nervous) /3
   avi$ha <- (avi$Aroused + avi$Surprised + avi$Astonished) / 3
-  #avi$neg <- (avi$Lonely + avi$Inactive + avi$Idle ) /3 # We don't think this is correct
+  #avi$neg <- (avi$Lonely + avi$Sad + avi$Unhappy ) /3 # Missing from one skew study?
   return(avi[,c(1:2,27:32)])
 }
 
