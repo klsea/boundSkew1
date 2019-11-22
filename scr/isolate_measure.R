@@ -21,15 +21,18 @@ add_correct_avi_labels <- function(avi, term1, term2, datadict) {
 }
 
 score_avi <- function(avi) {
+  n_items <- length(avi)
   avi$hap <- (avi$Enthusiastic + avi$Excited + avi$Strong + avi$Elated) / 4 
-  avi$lap <- (avi$Calm + avi$Relaxed + avi$Peaceful + avi$Serene) / 4
+  avi$lap <- (avi$Calm + avi$Relaxed + avi$Peaceful) / 3 # modified missing Serene
+  #avi$lap <- (avi$Calm + avi$Relaxed + avi$Peaceful + avi$Serene) / 4
   avi$la <- (avi$Quiet + avi$Passive + avi$Still) / 3
-  #avi$pos <- (avi$Content + avi$Happy + avi$Satisfied ) /3 # Missing from one skew study?
+  #avi$pos <- (avi$Content + avi$Happy + avi$Satisfied ) /3 # Missing all
   avi$lan <- (avi$Dull + avi$Sleepy + avi$Sluggish) / 3
   avi$han <- (avi$Fearful + avi$Hostile + avi$Nervous) /3
   avi$ha <- (avi$Aroused + avi$Surprised + avi$Astonished) / 3
-  #avi$neg <- (avi$Lonely + avi$Sad + avi$Unhappy ) /3 # Missing from one skew study?
-  return(avi[,c(1:2,27:32)])
+  #avi$neg <- (avi$Lonely + avi$Sad + avi$Unhappy ) /3 # Missing all but lonely
+  end <- length(avi)
+  return(avi[,c(1:2,(n_items+1):end)])
 }
 
 isolate_measure2 <- function(data, first_term, last_term, datadict) {
@@ -52,15 +55,15 @@ add_graph_lit_labels <- function(measure, first_term, last_term, datadict ) {
   lst <- as.data.frame(grep(last_term, datadict[,2]))
   f1 <- fst[1,]
   l1 <- lst[length(lst),]
-  ratings <- as.character(dd[f1:l1,2])
-  colnames(measure) <- c('SubID', ratings)
+  ratings <- as.character(datadict[f1:l1,2])
+  colnames(measure) <- c('SubID', 'Age', ratings)
   return(measure)
 }
   
 score_graph_lit <- function(data) {
   # input: data = data table of graph literacy only
-  dt <- cbind.data.frame(data$SubID, rowSums(data[2:11]))
-  colnames(dt) <- c('SubID', 'graph_lit')
+  dt <- cbind.data.frame(data$ID, data$Age, rowSums(data[3:length(d0)]))
+  colnames(dt) <- c('ID', 'Age', 'graph_lit')
   return(dt)
 }
 

@@ -20,11 +20,13 @@ dict <- read.csv(here("data", "bound_skew1_data_dictionary.csv"))
 Sys.setlocale('LC_ALL','C')
 qs <- as.character(dict$Question)
 first <- grep("Enthusiastic", qs)
-last <- grep("Serene", qs)
+last <- grep("Lonely", qs)
+#last <- grep("Serene", qs)
 d0 <- isolate_skew(dt,c(1,2), first:last)
 
 # add labels to AVI data
-d0 <- add_correct_avi_labels(d0, "Enthusiastic", "Serene", dict)
+d0 <- add_correct_avi_labels(d0, "Enthusiastic", "Lonely", dict)
+#d0 <- add_correct_avi_labels(d0, "Enthusiastic", "Serene", dict)
 d1 <- score_avi(d0)
 
 # Graph means
