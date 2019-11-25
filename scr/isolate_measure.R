@@ -76,7 +76,7 @@ hat_which_measure <- function(answers, response) {
   }
 }
 
-score_num <- function(num) {
+create_num_answer_key <- function() {
   QNAMES <- c("Q1","Q2","Q3", 'Q4', 'Q5','Q6','Q7','Q8a','Q8b', 'Q9', 'Q10','Q11','Q12','Q13','Q14')
   Q1 <- c("half the time", "50%", 490:510, 1:2)
   Q2 <- c("10", "10 people", "0.01", ".01", "1.00e+01")
@@ -95,7 +95,24 @@ score_num <- function(num) {
   Q14 <- c(3)
   
   QNUMBS <- list(Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8a,Q8b,Q9,Q10,Q11,Q12,Q13,Q14);QNUMBS
-  num_ans_key <- data.frame(QNAMES, I(QNUMBS));num_ans_key
-  num_ans_key[1,2]
+  return(QNUMBS)
+  #num_ans_key <- data.frame(QNAMES, I(QNUMBS));num_ans_key
+  #num_ans_key[1,2]
+  #return(num_ans_key)
+}
+
+score_num <- function(num, num_ans_key) {
+  dt <- matrix(, nrow = nrow(num), ncol = ncol(num))
+  for (col in 3:ncol(num)){
+    for (row in 1:nrow(num)){
+      dt[row, col] <- ifelse(as.character(num[row,col]) %in% num_ans_key[[col-2]], 1, 0)
+    }
+  }
+  score <- matrix(, nrow = nrow(num), ncol = 3)
+  score[,1] <- num[,1]
+  score[,2] <- num[,2]
+  score[,3] <- rowSums(dt[,3:17])
+  colnames(score) <- c('ID', 'Age', 'Numeracy')
+  return(score)
 }
 

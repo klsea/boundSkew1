@@ -1,5 +1,5 @@
 # visualize numeracy and graph literacy
-# 11.21.19 KLS
+# 11.25.19 KLS
 
 # load required packages
 library(here)
@@ -33,8 +33,16 @@ ggplot(d1, (aes(x=graph_lit))) + geom_histogram(binwidth = 0.5) +
 ggplot(d1, aes(Age, graph_lit)) + geom_point() + geom_smooth(method=lm)
 
 # isolate numeracy
+first <- grep("six-sided", qs)
+last <- grep("10,000 doctors", qs)
+d2 <- isolate_skew(dt,c(1,2), first:last)
 
 # score numeracy
+ans_key <- create_num_answer_key()
+d3 <- as.data.frame(score_num(d2, ans_key))
 
 # graph numeracy
- 
+ggplot(d3, (aes(x=Numeracy))) + geom_histogram(binwidth = 0.5) +
+  geom_vline(aes(xintercept=mean(Numeracy, na.rm=T)), color="red", linetype="dashed", size=1)
+
+ggplot(d3, aes(Age, Numeracy)) + geom_point() + geom_smooth(method=lm)
