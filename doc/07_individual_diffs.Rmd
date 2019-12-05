@@ -1,0 +1,86 @@
+---
+title: "Individual Differences"
+author: "Kendra Seaman"
+date: "12/5/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source('../09_individual_differences.R')
+library(kableExtra)
+library(ggplot2)
+```
+
+## Correlations with Acceptance of Skewed Gambles
+
+```{r correlations, echo = FALSE}
+ctable <- readRDS('../output/s1_corrCI.RDS')
+knitr::kable(ctable[2:nrow(ctable),1:2])  %>% 
+  kable_styling(full_width = F) %>%
+  row_spec(c(1,3:4, 6, 13:14, 17:18), bold = T, background = 'yellow')
+```
+
+### "I tried to solve the task on a gut level."
+```{r graph gut, echo = FALSE}
+ggplot(d7, aes(gut, skew_count)) + theme_minimal() +
+  geom_jitter(alpha=0.2, width = 0.2, height = 0.2) +
+  geom_smooth(method = lm, color = 'blue', fill = 'blue' ) + 
+  scale_y_continuous(breaks=seq(0,9,3))
+```
+
+### "I tried to solve the task by focusing on how much money I could win."
+```{r graph win.money, echo = FALSE}
+ggplot(d7, aes(win.money, skew_count)) + theme_minimal() +
+  geom_jitter(alpha=0.2, width = 0.2, height = 0.2) +
+  geom_smooth(method = lm, color = 'blue', fill = 'blue' ) + 
+  scale_y_continuous(breaks=seq(0,9,3))
+```
+
+### "I tried to solve the task by focusing on how much money I could lose."
+```{r graph lose.money, echo = FALSE}
+ggplot(d7, aes(lose.money, skew_count)) + theme_minimal() +
+  geom_jitter(alpha=0.2, width = 0.2, height = 0.2) +
+  geom_smooth(method = lm, color = 'blue', fill = 'blue' ) + 
+  scale_y_continuous(breaks=seq(0,9,3))
+```
+
+### "I tried to solve the task by focusing on how likely it was that I would lose."
+```{r graph lose.likely, echo = FALSE}
+ggplot(d7, aes(lose.likely, skew_count)) + theme_minimal() +
+  geom_jitter(alpha=0.2, width = 0.2, height = 0.2) +
+  geom_smooth(method = lm, color = 'blue', fill = 'blue' ) + 
+  scale_y_continuous(breaks=seq(0,9,3))
+```
+
+### Subjective Graph Literacy
+```{r graph sgl, echo = FALSE}
+ggplot(d7, aes(graph_lit, skew_count)) + theme_minimal() +
+  geom_jitter(alpha=0.2, width = 0.2, height = 0.2) +
+  geom_smooth(method = lm, color = 'blue', fill = 'blue' ) + 
+  scale_y_continuous(breaks=seq(0,9,3))
+```
+
+### Numeracy
+```{r graph numeracy, echo = FALSE}
+ggplot(d7, aes(Numeracy, skew_count)) + theme_minimal() +
+  geom_jitter(alpha=0.2, width = 0.2, height = 0.2) +
+  geom_smooth(method = lm, color = 'blue', fill = 'blue' ) + 
+  scale_y_continuous(breaks=seq(0,9,3))
+```
+
+### "How likely are you to make a fraudulent investment?"
+```{r graph likely_fraud, echo = FALSE}
+ggplot(d7, aes(likely_fraud, skew_count)) + theme_minimal() +
+  geom_jitter(alpha=0.2, width = 0.2, height = 0.2) +
+  geom_smooth(method = lm, color = 'blue', fill = 'blue' ) + 
+  scale_y_continuous(breaks=seq(0,9,3))
+```
+
+### How able are you to resist high-pressure sales tactics when buying investments?"
+```{r graph high_pressure, echo = FALSE}
+ggplot(d7, aes(high_pressure, skew_count)) + theme_minimal() +
+  geom_jitter(alpha=0.2, width = 0.2, height = 0.2) +
+  geom_smooth(method = lm, color = 'blue', fill = 'blue' ) + 
+  scale_y_continuous(breaks=seq(0,9,3))
+```

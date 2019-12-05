@@ -10,6 +10,7 @@ source(here('scr', 'isolate_skew.R'))
 source(here('scr', 'isolate_measure.R'))
 source(here('scr', 'clean_skew.R'))
 source(here('scr', 'count_skew.R'))
+source(here('scr', 'corrTableCI.R'))
 
 # set hard-coded variables
 
@@ -85,9 +86,11 @@ d7 <- merge(d6, d2, by = 'ID')
 rm(d1,d2,d6)
 
 # correlations
-end <- ncol(d7)
-s1_corr <- rcorr(as.matrix(d7[5:end]))
+end <- ncol(d7); #grep('why_lost', colnames(d7))
+s1_corr <- rcorr(as.matrix(d7[c(5:20, 22:end)]))
+s1_corrCI <- corrTableCI(d7[c(5:20, 22:end)])
 saveRDS(s1_corr, here('output', 's1_corr.RDS'))
+saveRDS(s1_corrCI, here('output', 's1_corrCI.RDS'))
 
 # models - strategy
 d7$magval <- interaction(d7$magnitude, d7$valence)
