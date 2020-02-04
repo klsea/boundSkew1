@@ -11,6 +11,8 @@ source(here('scr', 'isolate_skew.R'))
 source(here('scr', 'isolate_measure.R'))
 source(here('scr', 'SummarySE.R'))
 source(here('scr', 'pairedttable.R'))
+source(here('scr', 'corrTableCI.R'))
+source(here('scr', 'multiplot.R'))
 
 # set hard-coded variables
 
@@ -60,5 +62,20 @@ summary(affectaov)
 
 ttable <- pariedttable(d3,colnames(d1)[3:8], 1)
 ptable <- pariedttable(d3,colnames(d1)[3:8], 2)
+
+# Examine correlations with age
+agecorr <- corrTableCI(d1[2:8])
+
+#graphs
+age_lap <- ggplot(d1, aes(Age, lap)) + geom_point() + geom_smooth(method=lm) + 
+  ggtitle('Low Arousal - Positive')
+age_lan <- ggplot(d1, aes(Age, lan)) + geom_point() + geom_smooth(method=lm) + 
+  ggtitle('Low Arousal - Negative')
+age_han <- ggplot(d1, aes(Age, han)) + geom_point() + geom_smooth(method=lm) + 
+  ggtitle('High Arousal - Negative')
+age_ha <- ggplot(d1, aes(Age, ha)) + geom_point() + geom_smooth(method=lm) + 
+  ggtitle('High Arousal')
+
+age_plots <- multiplot(age_lap, age_lan, age_ha, age_han, cols = 2)
 
 
