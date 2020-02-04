@@ -6,9 +6,30 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(kableExtra)
+library(sjPlot)
 source('../06_graph_affect.R')
 ```
 
 ```{r graph, echo = FALSE}
 affect
+```
+
+## Comparison of conditions
+```{r stats, echo = FALSE, comment=''}
+summary(affectaov)
+```
+
+## Follow-up t-tests
+```{r followup1, echo = FALSE}
+ttable %>%
+  kable() %>%
+  kable_styling()
+```
+
+## Follow-up t-test p-values
+### critical p for bonferroni correction p = 0.003
+```{r followup2, echo = FALSE}
+ptable %>%
+  kable() %>%
+  kable_styling()
 ```

@@ -4,11 +4,13 @@
 # load required packages
 library(here)
 library(ggplot2)
+library(tidyr)
 
 # load source functions
 source(here('scr', 'isolate_skew.R'))
 source(here('scr', 'isolate_measure.R'))
 source(here('scr', 'SummarySE.R'))
+source(here('scr', 'pairedttable.R'))
 
 # set hard-coded variables
 
@@ -39,8 +41,8 @@ d2 <- data.frame(d2)
 d2$Mean <- as.numeric(as.character(d2$Mean))
 d2$SD <- as.numeric(as.character(d2$SD))
 d2$SE <- as.numeric(as.character(d2$SE))
-d2$names <- c('low arousal - positive', 'high arousal - positive', 'low arousal', 
-              'low arousal - negative', 'high arousal','high arousal -negative')
+d2$names <- c( 'high arousal - positive', 'low arousal - positive', 'low arousal', 
+              'low arousal - negative','high arousal -negative', 'high arousal')
 d2$names <- factor(d2$names, levels =c('low arousal', 'low arousal - negative', 'low arousal - positive', 
                                           'high arousal','high arousal -negative', 'high arousal - positive'))
 
@@ -49,3 +51,14 @@ affect <- ggplot(d2, aes(names, Mean, fill = names)) + geom_bar(stat='identity')
   geom_errorbar(aes(ymin = Mean-SE, ymax = Mean + SE), width = .2, position=position_dodge(.9)) +
   theme_minimal() + theme(legend.position = 'none', axis.text.x  = element_text(angle=90, vjust=0.5, size = 10)) + xlab("Affect") + ylab('Average Rating') +
   expand_limits(y=c(1,5)) + geom_vline(aes(xintercept=3.5))
+
+# ANOVA
+d3 <- gather(d1, condition, rating, hap:ha)
+affectaov <- aov(rating ~ condition + Error(ID), d3)
+summary(affectaov)  
+#print(model.tables(affectaov,"means"),digits=3)
+
+ttable <- pariedttable(d3,colnames(d1)[3:8], 1)
+ptable <- pariedttable(d3,colnames(d1)[3:8], 2)
+
+
