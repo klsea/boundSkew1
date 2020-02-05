@@ -37,7 +37,7 @@ d1 <- score_avi(d0)
 d2 <- cbind(colMeans(d1), apply(d1, 2, sd), apply(d1, 2, sd)/sqrt(nrow(d1)))
 d2 <- d2[3:nrow(d2),]
 colnames(d2) <- c('Mean', 'SD', 'SE')
-names <- rownames(d2); #rownames(d2) <- NULL
+names <- rownames(d2); rownames(d2) <- NULL
 names <- gsub('ha', 'high arousal', names)
 names <- gsub('la', 'low arousal', names)
 names <- gsub('p', ' - positive', names)
@@ -50,7 +50,9 @@ d2$SD <- as.numeric(as.character(d2$SD))
 d2$SE <- as.numeric(as.character(d2$SE))
 d2$names <- names
 d2$names <- factor(d2$names, levels =c('low arousal', 'low arousal - negative', 'low arousal - positive', 
-                                          'high arousal','high arousal -negative', 'high arousal - positive'))
+                                          'high arousal','high arousal - negative', 'high arousal - positive'))
+
+write.csv(d2, here::here('output', 'affect1.csv'), row.names = FALSE)
 
 affect <- ggplot(d2, aes(names, Mean, fill = names)) + geom_bar(stat='identity') + annotate("text", x=1, y=0, label="Never") + 
   annotate("text", x=1, y=5, label="All the time") + 

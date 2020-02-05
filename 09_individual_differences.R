@@ -87,8 +87,8 @@ rm(d1,d2,d6)
 
 # correlations
 end <- ncol(d7); #grep('why_lost', colnames(d7))
-s1_corr <- rcorr(as.matrix(d7[c(5:20, 22:end)]))
-s1_corrCI <- corrTableCI(d7[c(5:20, 22:end)])
+s1_corr <- rcorr(as.matrix(d7[c(2, 5:20, 22:end)]))
+s1_corrCI <- corrTableCI(d7[c(2, 5:20, 22:end)])
 saveRDS(s1_corr, here('output', 's1_corr.RDS'))
 saveRDS(s1_corrCI, here('output', 's1_corrCI.RDS'))
 
