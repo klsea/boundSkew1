@@ -37,14 +37,18 @@ d1 <- score_avi(d0)
 d2 <- cbind(colMeans(d1), apply(d1, 2, sd), apply(d1, 2, sd)/sqrt(nrow(d1)))
 d2 <- d2[3:nrow(d2),]
 colnames(d2) <- c('Mean', 'SD', 'SE')
-names <- rownames(d2); rownames(d2) <- NULL
+names <- rownames(d2); #rownames(d2) <- NULL
+names <- gsub('ha', 'high arousal', names)
+names <- gsub('la', 'low arousal', names)
+names <- gsub('p', ' - positive', names)
+names <- gsub('n', ' - negative', names)
+
 d2 <- cbind(names, d2)
 d2 <- data.frame(d2)
 d2$Mean <- as.numeric(as.character(d2$Mean))
 d2$SD <- as.numeric(as.character(d2$SD))
 d2$SE <- as.numeric(as.character(d2$SE))
-d2$names <- c( 'high arousal - positive', 'low arousal - positive', 'low arousal', 
-              'low arousal - negative','high arousal -negative', 'high arousal')
+d2$names <- names
 d2$names <- factor(d2$names, levels =c('low arousal', 'low arousal - negative', 'low arousal - positive', 
                                           'high arousal','high arousal -negative', 'high arousal - positive'))
 
@@ -58,7 +62,6 @@ affect <- ggplot(d2, aes(names, Mean, fill = names)) + geom_bar(stat='identity')
 d3 <- gather(d1, condition, rating, hap:ha)
 affectaov <- aov(rating ~ condition + Error(ID), d3)
 summary(affectaov)  
-#print(model.tables(affectaov,"means"),digits=3)
 
 ttable <- pariedttable(d3,colnames(d1)[3:8], 1)
 ptable <- pariedttable(d3,colnames(d1)[3:8], 2)
@@ -76,6 +79,6 @@ age_han <- ggplot(d1, aes(Age, han)) + geom_point() + geom_smooth(method=lm) +
 age_ha <- ggplot(d1, aes(Age, ha)) + geom_point() + geom_smooth(method=lm) + 
   ggtitle('High Arousal')
 
-age_plots <- multiplot(age_lap, age_lan, age_ha, age_han, cols = 2)
+#multiplot(age_lap, age_lan, age_ha, age_han, cols = 2)
 
 
