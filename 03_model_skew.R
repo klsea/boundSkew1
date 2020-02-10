@@ -59,6 +59,7 @@ d3 <- spread(d2[,c(1,2,4)], 'deg_skew', 'accept')
 b1t1 <- t.test(d3$Symmetric, d3$Weak, paired = TRUE)
 b1t2 <- t.test(d3$Symmetric, d3$Moderate, paired = TRUE)
 b1t3 <- t.test(d3$Symmetric, d3$Strong, paired = TRUE)
+b1t4 <- t.test(d3$Moderate, d3$Strong, paired = TRUE)
 rm(d2,d3)
 
 # model 1 - add valence
