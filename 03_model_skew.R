@@ -9,14 +9,15 @@ library(gdata)
 library(tidyr)
 
 # load source functions
-source(here('scr', 'isolate_skew.R'))
-source(here('scr', 'clean_skew.R'))
-source(here('scr', 'SummarySE.R'))
+source(here::here('scr', 'isolate_skew.R'))
+source(here::here('scr', 'clean_skew.R'))
+source(here::here('scr', 'SummarySE.R'))
+source(here::here('scr', 'pairedttable.R'))
 
 # set hard-coded variables
 
 # load data
-dt <- read.csv(here("data", "bound_skew1_data.csv"))
+dt <- read.csv(here::here("data", "bound_skew1_data.csv"))
 
 # separate skew
 d0 <- isolate_skew(dt,c(1,2),10:69)
@@ -51,22 +52,20 @@ summary(b1, correlation = FALSE)
 b1.1 <- glmer(accept ~ deg_skew + (1 | ID), data = d1, family = binomial(link = logit), nAGQ = 1, 
             control=glmerControl(optimizer='bobyqa'))
 summary(b1.1, correlation = FALSE)
-saveRDS(b1.1, here('output', 'baseline.RDS'))
+saveRDS(b1.1, here::here('output', 'baseline.RDS'))
 
 ##follow-up t-tests
 d2 <- summarySE(d1, 'accept', groupvars = c('ID', 'deg_skew'))
 d3 <- spread(d2[,c(1,2,4)], 'deg_skew', 'accept')
-b1t1 <- t.test(d3$Symmetric, d3$Weak, paired = TRUE)
-b1t2 <- t.test(d3$Symmetric, d3$Moderate, paired = TRUE)
-b1t3 <- t.test(d3$Symmetric, d3$Strong, paired = TRUE)
-b1t4 <- t.test(d3$Moderate, d3$Strong, paired = TRUE)
-rm(d2,d3)
+b1_follow <- pairedttable(d3, colnames(d3[2:5]), 1)
+write.csv(b1_follow, here::here('output', 'b1_follow.csv'))
+rm(d2,d3, b1_follow)
 
 # model 1 - add valence
 m1 <- glmer(accept ~ deg_skew * valence + (1 | ID), data = d1, family = binomial(link = logit), nAGQ = 1, 
             control=glmerControl(optimizer='bobyqa'))
 summary(m1, correlation = FALSE)
-saveRDS(m1, here('output', 'm1.RDS'))
+saveRDS(m1, here::here('output', 'm1.RDS'))
 
 ## compare model 1 and model 2
 anova(b1.1,m1)
@@ -75,10 +74,13 @@ anova(b1.1,m1)
 d4 <- summarySE(d1, 'accept', groupvars = c('ID', 'deg_skew', 'valence'))
 d4$skew_valence <- interaction(d4$deg_skew, d4$valence)
 d5 <- spread(d4[,c(1,9,5)], 'skew_valence', 'accept')
-m1t1 <- t.test(d5$Symmetric.loss, d5$Weak.loss, paired = TRUE)
-m1t2 <- t.test(d5$Symmetric.loss, d5$Moderate.loss, paired = TRUE)
-m1t3 <- t.test(d5$Symmetric.loss, d5$Strong.loss, paired = TRUE)
-rm(d4, d5)
+m1_follow_neutral <- pairedttable(d5, colnames(d5[2:5]), 1)
+m1_follow_gain <- pairedttable(d5, colnames(d5[6:9]), 1)
+m1_follow_loss <- pairedttable(d5, colnames(d5[10:13]), 1)
+write.csv(m1_follow_neutral, here::here('output', 'm1_follow_neutral.csv'))
+write.csv(m1_follow_gain, here::here('output', 'm1_follow_gain.csv'))
+write.csv(m1_follow_loss, here::here('output', 'm1_follow_loss.csv'))
+rm(d4, d5, m1_follow_neutral, m1_follow_gain, m1_follow_loss)
 
 # Does magnitude make a difference?
 
@@ -91,15 +93,17 @@ saveRDS(m2, here('output', 'm2.RDS'))
 ## compare model 2 to baseline
 anova(b1.1,m2)
 
-## follow-up t-tests
-d8 <- summarySE(d1, 'accept', groupvars = c('ID', 'deg_skew', 'magval'))
-d8$skew_magval <- interaction(d8$deg_skew, d8$magval)
-d9 <- spread(d8[,c(1,9,5)], 'skew_magval', 'accept')
-m3t1 <- t.test(d9$Symmetric.loss.5, d9$Weak.loss.5, paired = TRUE)
-m3t2 <- t.test(d9$Symmetric.loss.5, d9$Moderate.loss.5, paired = TRUE)
-m3t3 <- t.test(d9$Symmetric.loss.5, d9$Strong.loss.5, paired = TRUE)
-m3t4 <- t.test(d9$Symmetric.gain.5, d9$Moderate.gain.5, paired = TRUE)
-rm(d8, d9)
+## Follow-up t-tests
+d6 <- summarySE(d1, 'accept', groupvars = c('ID', 'deg_skew', 'magnitude'))
+d6$skew_mag <- interaction(d6$deg_skew, d6$magnitude)
+d7 <- spread(d6[,c(1,9,5)], 'skew_mag', 'accept')
+m2_follow_neutral <- pairedttable(d7, colnames(d7[2:5]), 1)
+m2_follow_gain <- pairedttable(d7, colnames(d7[6:9]), 1)
+m2_follow_loss <- pairedttable(d7, colnames(d7[10:13]), 1)
+write.csv(m2_follow_neutral, here::here('output', 'm2_follow_neutral.csv'))
+write.csv(m2_follow_gain, here::here('output', 'm2_follow_gain.csv'))
+write.csv(m2_follow_loss, here::here('output', 'm2_follow_loss.csv'))
+rm(d6, d7, m2_follow_neutral, m2_follow_gain, m2_follow_loss)
 
 # model 3 - interaction between mag and val
 m3 <- glmer(accept ~ deg_skew * magval + (1 | ID), data = d1, family = binomial(link = logit), nAGQ = 1, 
@@ -110,14 +114,24 @@ saveRDS(m3, here('output', 'm3.RDS'))
 ## compare model 3 to baseline
 anova(b1.1, m3)
 
-## Follow-up t-tests
-d6 <- summarySE(d1, 'accept', groupvars = c('ID', 'deg_skew', 'magnitude'))
-d6$skew_mag <- interaction(d6$deg_skew, d6$magnitude)
-d7 <- spread(d6[,c(1,9,5)], 'skew_mag', 'accept')
-m2t1 <- t.test(d7$Symmetric.5, d7$Weak.5, paired = TRUE)
-m2t2 <- t.test(d7$Symmetric.5, d7$Moderate.5, paired = TRUE)
-m2t3 <- t.test(d7$Symmetric.5, d7$Strong.5, paired = TRUE)
-rm(d6, d7)
+## follow-up t-tests
+d8 <- summarySE(d1, 'accept', groupvars = c('ID', 'deg_skew', 'magval'))
+d8$skew_magval <- interaction(d8$deg_skew, d8$magval)
+d9 <- spread(d8[,c(1,9,5)], 'skew_magval', 'accept')
+#neutral
+m3_follow_neutral_0 <- pairedttable(d9, colnames(d9[2:5]), 1)
+write.csv(m3_follow_neutral_0, here::here('output', 'm3_follow_neutral_0.csv'))
+#losses
+m3_follow_loss_5 <- pairedttable(d9, colnames(d9[6:9]), 1)
+write.csv(m3_follow_loss_5, here::here('output', 'm3_follow_loss_5.csv'))
+m3_follow_loss_05 <- pairedttable(d9, colnames(d9[10:13]), 1)
+write.csv(m3_follow_loss_05, here::here('output', 'm3_follow_loss_05.csv'))
+#gains
+m3_follow_gain_5 <- pairedttable(d9, colnames(d9[14:17]), 1)
+write.csv(m3_follow_gain_5, here::here('output', 'm3_follow_gain_5.csv'))
+m3_follow_gain_05 <- pairedttable(d9, colnames(d9[18:21]), 1)
+write.csv(m3_follow_gain_05, here::here('output', 'm3_follow_gain_05.csv'))
+rm(d8, d9, m3_follow_neutral_0, m3_follow_loss_5, m3_follow_loss_05, m3_follow_gain_5, m3_follow_gain_05)
 
 # model 4 - add Age
 m4 <- glmer(accept ~ deg_skew * magval + Age + (1 | ID), data = d1, family = binomial(link = logit), nAGQ = 1, 
