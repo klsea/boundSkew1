@@ -7,6 +7,7 @@ library(here)
 library(lme4)
 library(gdata)
 library(tidyr)
+library(rlist)
 
 # load source functions
 source(here::here('scr', 'isolate_skew.R'))
@@ -57,8 +58,8 @@ saveRDS(b1.1, here::here('output', 'baseline.RDS'))
 ##follow-up t-tests
 d2 <- summarySE(d1, 'accept', groupvars = c('ID', 'deg_skew'))
 d3 <- spread(d2[,c(1,2,4)], 'deg_skew', 'accept')
-b1_follow <- pairedttable(d3, colnames(d3[2:5]), 1)
-write.csv(b1_follow, here::here('output', 'b1_follow.csv'))
+b1_follow <- pairedttable(d3, colnames(d3[2:5]))
+list.save(b1_follow, here::here('output', 'b1_follow.rds'))
 rm(d2,d3, b1_follow)
 
 # model 1 - add valence
@@ -74,12 +75,12 @@ anova(b1.1,m1)
 d4 <- summarySE(d1, 'accept', groupvars = c('ID', 'deg_skew', 'valence'))
 d4$skew_valence <- interaction(d4$deg_skew, d4$valence)
 d5 <- spread(d4[,c(1,9,5)], 'skew_valence', 'accept')
-m1_follow_neutral <- pairedttable(d5, colnames(d5[2:5]), 1)
-m1_follow_gain <- pairedttable(d5, colnames(d5[6:9]), 1)
-m1_follow_loss <- pairedttable(d5, colnames(d5[10:13]), 1)
-write.csv(m1_follow_neutral, here::here('output', 'm1_follow_neutral.csv'))
-write.csv(m1_follow_gain, here::here('output', 'm1_follow_gain.csv'))
-write.csv(m1_follow_loss, here::here('output', 'm1_follow_loss.csv'))
+m1_follow_neutral <- pairedttable(d5, colnames(d5[2:5]))
+m1_follow_gain <- pairedttable(d5, colnames(d5[6:9]))
+m1_follow_loss <- pairedttable(d5, colnames(d5[10:13]))
+list.save(m1_follow_neutral, here::here('output', 'm1_follow_neutral.rds'))
+list.save(m1_follow_gain, here::here('output', 'm1_follow_gain.rds'))
+list.save(m1_follow_loss, here::here('output', 'm1_follow_loss.rds'))
 rm(d4, d5, m1_follow_neutral, m1_follow_gain, m1_follow_loss)
 
 # Does magnitude make a difference?
@@ -88,7 +89,7 @@ rm(d4, d5, m1_follow_neutral, m1_follow_gain, m1_follow_loss)
 m2 <- glmer(accept ~ deg_skew  * magnitude + (1 | ID), data = d1, family = binomial(link = logit), nAGQ = 1, 
               control=glmerControl(optimizer='bobyqa'))
 summary(m2, correlation = FALSE)
-saveRDS(m2, here('output', 'm2.RDS'))
+saveRDS(m2, here::here('output', 'm2.RDS'))
 
 ## compare model 2 to baseline
 anova(b1.1,m2)
@@ -97,19 +98,19 @@ anova(b1.1,m2)
 d6 <- summarySE(d1, 'accept', groupvars = c('ID', 'deg_skew', 'magnitude'))
 d6$skew_mag <- interaction(d6$deg_skew, d6$magnitude)
 d7 <- spread(d6[,c(1,9,5)], 'skew_mag', 'accept')
-m2_follow_neutral <- pairedttable(d7, colnames(d7[2:5]), 1)
-m2_follow_gain <- pairedttable(d7, colnames(d7[6:9]), 1)
-m2_follow_loss <- pairedttable(d7, colnames(d7[10:13]), 1)
-write.csv(m2_follow_neutral, here::here('output', 'm2_follow_neutral.csv'))
-write.csv(m2_follow_gain, here::here('output', 'm2_follow_gain.csv'))
-write.csv(m2_follow_loss, here::here('output', 'm2_follow_loss.csv'))
+m2_follow_neutral <- pairedttable(d7, colnames(d7[2:5]))
+m2_follow_gain <- pairedttable(d7, colnames(d7[6:9]))
+m2_follow_loss <- pairedttable(d7, colnames(d7[10:13]))
+list.save(m2_follow_neutral, here::here('output', 'm2_follow_neutral.rds'))
+list.save(m2_follow_gain, here::here('output', 'm2_follow_gain.rds'))
+list.save(m2_follow_loss, here::here('output', 'm2_follow_loss.rds'))
 rm(d6, d7, m2_follow_neutral, m2_follow_gain, m2_follow_loss)
 
 # model 3 - interaction between mag and val
 m3 <- glmer(accept ~ deg_skew * magval + (1 | ID), data = d1, family = binomial(link = logit), nAGQ = 1, 
             control=glmerControl(optimizer='bobyqa'))
 summary(m3, correlation = FALSE)
-saveRDS(m3, here('output', 'm3.RDS'))
+saveRDS(m3, here::here('output', 'm3.RDS'))
 
 ## compare model 3 to baseline
 anova(b1.1, m3)
@@ -119,25 +120,25 @@ d8 <- summarySE(d1, 'accept', groupvars = c('ID', 'deg_skew', 'magval'))
 d8$skew_magval <- interaction(d8$deg_skew, d8$magval)
 d9 <- spread(d8[,c(1,9,5)], 'skew_magval', 'accept')
 #neutral
-m3_follow_neutral_0 <- pairedttable(d9, colnames(d9[2:5]), 1)
-write.csv(m3_follow_neutral_0, here::here('output', 'm3_follow_neutral_0.csv'))
+m3_follow_neutral_0 <- pairedttable(d9, colnames(d9[2:5]))
+list.save(m3_follow_neutral_0, here::here('output', 'm3_follow_neutral_0.rds'))
 #losses
-m3_follow_loss_5 <- pairedttable(d9, colnames(d9[6:9]), 1)
-write.csv(m3_follow_loss_5, here::here('output', 'm3_follow_loss_5.csv'))
-m3_follow_loss_05 <- pairedttable(d9, colnames(d9[10:13]), 1)
-write.csv(m3_follow_loss_05, here::here('output', 'm3_follow_loss_05.csv'))
+m3_follow_loss_5 <- pairedttable(d9, colnames(d9[6:9]))
+list.save(m3_follow_loss_5, here::here('output', 'm3_follow_loss_5.rds'))
+m3_follow_loss_05 <- pairedttable(d9, colnames(d9[10:13]))
+list.save(m3_follow_loss_05, here::here('output', 'm3_follow_loss_05.rds'))
 #gains
-m3_follow_gain_5 <- pairedttable(d9, colnames(d9[14:17]), 1)
-write.csv(m3_follow_gain_5, here::here('output', 'm3_follow_gain_5.csv'))
-m3_follow_gain_05 <- pairedttable(d9, colnames(d9[18:21]), 1)
-write.csv(m3_follow_gain_05, here::here('output', 'm3_follow_gain_05.csv'))
+m3_follow_gain_5 <- pairedttable(d9, colnames(d9[14:17]))
+list.save(m3_follow_gain_5, here::here('output', 'm3_follow_gain_5.rds'))
+m3_follow_gain_05 <- pairedttable(d9, colnames(d9[18:21]))
+list.save(m3_follow_gain_05, here::here('output', 'm3_follow_gain_05.rds'))
 rm(d8, d9, m3_follow_neutral_0, m3_follow_loss_5, m3_follow_loss_05, m3_follow_gain_5, m3_follow_gain_05)
 
 # model 4 - add Age
 m4 <- glmer(accept ~ deg_skew * magval + Age + (1 | ID), data = d1, family = binomial(link = logit), nAGQ = 1, 
             control=glmerControl(optimizer='bobyqa'))
 summary(m4, correlation = FALSE)
-saveRDS(m4, here('output', 'm4.RDS'))
+saveRDS(m4, here::here('output', 'm4.RDS'))
 
 # compare model 5 to model 4
 anova(m3,m4)
