@@ -84,6 +84,7 @@ colnames(d2) <- c('ID', 'lost_invest', 'why_lost', 'detect_fraud', 'likely_fraud
 # merge real world with skew+strategy+affect+cog
 d7 <- merge(d6, d2, by = 'ID')
 rm(d1,d2,d6)
+write.csv(d7, here::here('output', 'individual_differences.csv'), row.names = FALSE)
 
 # correlations
 end <- ncol(d7); #grep('why_lost', colnames(d7))
