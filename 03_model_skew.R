@@ -8,6 +8,9 @@ library(lme4)
 library(gdata)
 library(tidyr)
 library(rlist)
+library(sjPlot)
+library(sjmisc)
+library(sjlabelled)
 
 # load source functions
 source(here::here('scr', 'isolate_skew.R'))
@@ -143,6 +146,16 @@ saveRDS(m4, here::here('output', 'm4.RDS'))
 # compare model 5 to model 4
 anova(m3,m4)
 
+# Create table for manuscript
+tab_model(b1, m1, m2, m3, m4)
 
+t1 <- matrix(nrow=15,ncol=7)
+t1[1,]<- c('', '', 'Baseline', 'Model 1', 'Model 2', 'Model 3', 'Model 4')
+t1[2,]<- c('Predictor', 'Comparison', '', '', '', '', '')
+t1[,1]<- c('', 'Predictor', 'Degree of Skew', '', '', 'Valence', '', 'Magnitude','', 
+           'Valence x Magnitude', '', '', '', 'Age', 'Fit')
+t1[,2]<- c('', 'Comparison', 'Weak > Symmetric', 'Moderate > Symmetric', 'Strong > Symmetric', 
+           'Gain > Neutral','Loss > Neutral', '$0.5 > $0', '$5 > $0','Lose $5 > Neutral $0', 
+           '$Lose $0.5 > Neutral $0', 'Gain $0.5 > Neutral $0','Gain $5 > Neutral $0', '','')
 
 

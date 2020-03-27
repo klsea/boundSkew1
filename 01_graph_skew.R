@@ -85,7 +85,7 @@ p2 <- ggplot(d6, aes(magval, accept, fill = deg_skew)) + geom_bar(position=posit
 
 p3 <- multiplot(p1, p2, layout = matrix(c(1,2,2,2), nrow=1, byrow=TRUE))
 
-pdf('figs/deg_skew_plot1.pdf', width = 12, height = 6))
+pdf('figs/deg_skew_plot1.pdf', width = 12, height = 6)
 multiplot(p1, p2, layout = matrix(c(1,2,2,2), nrow=1, byrow=TRUE))
 dev.off()
 
