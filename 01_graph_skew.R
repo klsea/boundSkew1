@@ -85,6 +85,33 @@ p2 <- ggplot(d6, aes(magval, accept, fill = deg_skew)) + geom_bar(position=posit
 
 p3 <- multiplot(p1, p2, layout = matrix(c(1,2,2,2), nrow=1, byrow=TRUE))
 
-pdf('figs/deg_skew_plot1.pdf')
+pdf('figs/deg_skew_plot1.pdf', width = 12, height = 6))
+multiplot(p1, p2, layout = matrix(c(1,2,2,2), nrow=1, byrow=TRUE))
+dev.off()
+
+# poster plots
+# graph constants
+lg = 26 # text size
+md = 20
+sm = 14
+
+p1 <- ggplot(d2, aes(deg_skew, accept, fill = deg_skew)) + geom_bar(position=position_dodge(), stat='identity') + 
+  geom_errorbar(aes(ymin=accept - se, ymax = accept + se), width = .2, position=position_dodge(.9)) + 
+  theme_minimal() + ylab('Acceptance Rate')  + expand_limits(y=c(-.06, 1)) + 
+  scale_fill_discrete(name = 'Skewness') +
+  theme(axis.text.x=element_blank(), axis.title.x=element_blank(), 
+        axis.title.y = element_text(size = lg), axis.text.y = element_text(size = md), 
+        legend.title = element_text(size = md), legend.text = element_text(size = sm),
+        legend.justification = c(1,1), legend.position=c(1,1),) 
+
+p2 <- ggplot(d6, aes(magval, accept, fill = deg_skew)) + geom_bar(position=position_dodge(), stat='identity') + 
+  geom_errorbar(aes(ymin=accept - se, ymax = accept + se), width = .2, position=position_dodge(.9)) + 
+  xlab('Valence by Magnitude Interaction') +theme_minimal() + 
+  theme(axis.title.y = element_blank(), axis.text.y = element_text(size = md), 
+        legend.position = 'none', 
+        axis.title.x = element_text(size = lg), axis.text.x = element_text(size = md), 
+        ) + expand_limits(y=1) 
+
+pdf('figs/deg_skew_poster.pdf', width = 12, height = 9)
 multiplot(p1, p2, layout = matrix(c(1,2,2,2), nrow=1, byrow=TRUE))
 dev.off()
