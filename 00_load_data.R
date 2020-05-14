@@ -16,7 +16,7 @@ dt <- read.csv(here('data', 'boundskew1raw.csv'))
 dt$ID <- c(0,0,seq(1,209,1))
 
 # clean
-dt <- dt[-c(1:2)]
+dt <- dt[-c(1:2, 145:(ncol(dt)-1))]
 dt <- dt[c(ncol(dt),1:(ncol(dt)-1))]
 
 # create data dictionary
