@@ -11,6 +11,7 @@ source(here('scr', 'isolate_measure.R'))
 source(here('scr', 'clean_skew.R'))
 source(here('scr', 'count_skew.R'))
 source(here('scr', 'corrTableCI.R'))
+source(here('scr', 'corrTableCI.R'))
 
 # set hard-coded variables
 

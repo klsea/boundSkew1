@@ -36,8 +36,13 @@ dd$`Variable Names`[c(20:21, 32:33, 44:45, 56:57, 68:69)] <- paste0('Catch_', se
 dd$`Variable Names`[c(70:75)] <- paste0('Strategy_', seq(1,6))
 dd$`Variable Names`[c(76:84)] <- paste0('Investment_', seq(1,9))
 dd$`Variable Names`[c(85:93)] <- paste0('Fraud_', seq(1,9))
-dd$`Variable Names`[c(94:117)] <- paste0('AVI_', seq(1,24))
-dd$`Variable Names`[c(118:132)] <- paste0('Numeracy_', seq(1,14))
+dd$`Variable Names`[c(94:117)] <- c("Enthusiastic", "Dull", "Excited", "Sleepy",
+                                    "Strong", "Sluggish", "Euphoric", "Idle", "Aroused", 
+                                    "Rested", "Astonished", "Quiet", "Surprised", "Still", 
+                                    "Passive", "Inactive", "Fearful", "Calm", "Hostile", 
+                                    "Peaceful", "Nervous", "Relaxed", "Elated", "Lonely")
+
+dd$`Variable Names`[c(118:132)] <- paste0('Numeracy_', seq(1,15))
 dd$`Variable Names`[c(133:142)] <- paste0('Graph_Lit_', seq(1,10))
 dd$`Variable Names`[143] <- 'DOB'
 
