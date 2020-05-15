@@ -97,17 +97,18 @@ saveRDS(s1_corrCI, here('output', 's1_corrCI.RDS'))
 # models - strategy
 d7$magval <- interaction(d7$magnitude, d7$valence)
 m1 <- lm(skew_count ~ gut + magval, data = d7)
-summary(m1)
+summary(m1) #*
 m2 <- lm(skew_count ~ win.money + magval, data = d7)
-summary(m2)
+summary(m2) #*
 m3 <- lm(skew_count ~ lose.money + magval, data = d7)
-summary(m3)
+summary(m3) #*
 m4 <- lm(skew_count ~ lose.likely + magval, data = d7)
-summary(m4)
+summary(m4) #*
 m5 <- lm(skew_count ~ math + magval, data = d7)
 summary(m5)
 m6 <- lm(skew_count ~ win.likely + magval, data = d7)
 summary(m6)
+
 
 # models - affect
 m7 <- lm(skew_count ~ hap + magval, data = d7)
@@ -141,3 +142,4 @@ summary(m17)
 m18 <- lm(skew_count ~ high_pressure + magval, data = d7)
 summary(m18)
 
+saveRDS(list(m1,m2,m3,m4,m13,m14,m18), here('output', 's1_reg.RDS'))
