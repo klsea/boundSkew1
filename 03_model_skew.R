@@ -62,6 +62,7 @@ saveRDS(b1.1, here::here('output', 'baseline.RDS'))
 d2 <- summarySE(d1, 'accept', groupvars = c('ID', 'deg_skew'))
 d3 <- spread(d2[,c(1,2,4)], 'deg_skew', 'accept')
 b1_follow <- pairedttable(d3, colnames(d3[2:5]))
+names(b1_follow)[3] <- 'pval'
 list.save(b1_follow, here::here('output', 'b1_follow.rds'))
 rm(d2,d3, b1_follow)
 
@@ -81,6 +82,7 @@ d5 <- spread(d4[,c(1,9,5)], 'skew_valence', 'accept')
 m1_follow_neutral <- pairedttable(d5[c(1,2:5)], colnames(d5[2:5]))
 m1_follow_gain <- pairedttable(d5[c(1,6:9)], colnames(d5[6:9]))
 m1_follow_loss <- pairedttable(d5[c(1,10:13)], colnames(d5[10:13]))
+names(m1_follow_loss)[3] <- 'pval'
 list.save(m1_follow_neutral, here::here('output', 'm1_follow_neutral.rds'))
 list.save(m1_follow_gain, here::here('output', 'm1_follow_gain.rds'))
 list.save(m1_follow_loss, here::here('output', 'm1_follow_loss.rds'))
@@ -104,6 +106,7 @@ d7 <- spread(d6[,c(1,9,5)], 'skew_mag', 'accept')
 m2_follow_zero <- pairedttable(d7[c(1,2:5)], colnames(d7[2:5]))
 m2_follow_small <- pairedttable(d7[c(1,6:9)], colnames(d7[6:9]))
 m2_follow_large <- pairedttable(d7[c(1,10:13)], colnames(d7[10:13]))
+names(m2_follow_large)[3] <- 'pval'
 list.save(m2_follow_zero, here::here('output', 'm2_follow_zero.rds'))
 list.save(m2_follow_small, here::here('output', 'm2_follow_smallmag.rds'))
 list.save(m2_follow_large, here::here('output', 'm2_follow_largemag.rds'))
@@ -127,14 +130,16 @@ m3_follow_neutral_0 <- pairedttable(d9[c(1,2:5)], colnames(d9[2:5]))
 list.save(m3_follow_neutral_0, here::here('output', 'm3_follow_neutral_0.rds'))
 #losses
 m3_follow_loss_5 <- pairedttable(d9[c(1,6:9)], colnames(d9[6:9]))
+names(m3_follow_loss_5)[3] <- 'pval'
 list.save(m3_follow_loss_5, here::here('output', 'm3_follow_loss_5.rds'))
 m3_follow_loss_05 <- pairedttable(d9[c(1,10:13)], colnames(d9[10:13]))
 list.save(m3_follow_loss_05, here::here('output', 'm3_follow_loss_05.rds'))
 #gains
-m3_follow_gain_5 <- pairedttable(d9[c(1,14:17)], colnames(d9[14:17]))
-list.save(m3_follow_gain_5, here::here('output', 'm3_follow_gain_5.rds'))
-m3_follow_gain_05 <- pairedttable(d9[c(1,18:21)], colnames(d9[18:21]))
-list.save(m3_follow_gain_05, here::here('output', 'm3_follow_gain_05.rds'))
+m3_follow_gain_05 <- pairedttable(d9[c(1,14:17)], colnames(d9[14:17]))
+list.save(m3_follow_gain_5, here::here('output', 'm3_follow_gain_05.rds'))
+m3_follow_gain_5 <- pairedttable(d9[c(1,18:21)], colnames(d9[18:21]))
+names(m3_follow_gain_5)[3] <- 'pval'
+list.save(m3_follow_gain_05, here::here('output', 'm3_follow_gain_5.rds'))
 rm(d8, d9, m3_follow_neutral_0, m3_follow_loss_5, m3_follow_loss_05, m3_follow_gain_5, m3_follow_gain_05)
 
 # model 4 - add Age
