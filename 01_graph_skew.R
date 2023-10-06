@@ -39,7 +39,7 @@ d2 <- summarySE(data=d1, measurevar = 'accept', groupvars='deg_skew')
 
 p1 <- ggplot(d2, aes(deg_skew, accept, fill = deg_skew)) + geom_bar(position=position_dodge(), stat='identity') + 
   geom_errorbar(aes(ymin=accept - se, ymax = accept + se), width = .2, position=position_dodge(.9)) + 
-  theme_minimal() + ylab('Acceptance Rate')  + expand_limits(y=c(-.06, 1)) + 
+  theme_minimal() + ylab('Risky Gamble Choice Rate')  + expand_limits(y=c(-.06, 1)) + 
   theme(legend.position = 'none') + scale_fill_discrete(name = 'Skewness') +
   theme(axis.text.x=element_blank(), axis.title.x=element_blank(), legend.justification = c(1,1), legend.position=c(1,1),) #+ xlab('Degree of Skewness')
 
@@ -97,7 +97,7 @@ sm = 14
 
 p1 <- ggplot(d2, aes(deg_skew, accept, fill = deg_skew)) + geom_bar(position=position_dodge(), stat='identity') + 
   geom_errorbar(aes(ymin=accept - se, ymax = accept + se), width = .2, position=position_dodge(.9)) + 
-  theme_minimal() + ylab('Acceptance Rate')  + expand_limits(y=c(-.06, 1)) + 
+  theme_minimal() + ylab('Risky Gamble Choice Rate')  + expand_limits(y=c(-.06, 1)) + 
   scale_fill_discrete(name = 'Skewness') +
   theme(axis.text.x=element_blank(), axis.title.x=element_blank(), 
         axis.title.y = element_text(size = lg), axis.text.y = element_text(size = md), 
