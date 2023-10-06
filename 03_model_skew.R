@@ -48,12 +48,12 @@ d1$magval <- drop.levels(d1$magval)
 d1$magval <- factor(d1$magval, levels = c('neutral.0', 'loss.5', 'loss.0.5', 'gain.0.5', 'gain.5'))
 
 # baseline - only degree of skew
-b1 <- glmer(accept ~ deg_skew + (1 + Age | ID), data = d1, family = binomial(link = logit), nAGQ = 1, 
+b1 <- glmer(accept ~ deg_skew + (1 + Age | ID), data = d1, family = binomial(link = "logit"), nAGQ = 1, 
                control=glmerControl(optimizer='bobyqa'))
 summary(b1, correlation = FALSE)
 
 ## boundary fit - remove age from random effects
-b1.1 <- glmer(accept ~ deg_skew + (1 | ID), data = d1, family = binomial(link = logit), nAGQ = 1, 
+b1.1 <- glmer(accept ~ deg_skew + (1 | ID), data = d1, family = binomial(link = "logit"), nAGQ = 1, 
             control=glmerControl(optimizer='bobyqa'))
 summary(b1.1, correlation = FALSE)
 saveRDS(b1.1, here::here('output', 'baseline.RDS'))
@@ -67,7 +67,7 @@ list.save(b1_follow, here::here('output', 'b1_follow.rds'))
 rm(d2,d3, b1_follow)
 
 # model 1 - add valence
-m1 <- glmer(accept ~ deg_skew * valence + (1 | ID), data = d1, family = binomial(link = logit), nAGQ = 1, 
+m1 <- glmer(accept ~ deg_skew * valence + (1 | ID), data = d1, family = binomial(link = "logit"), nAGQ = 1, 
             control=glmerControl(optimizer='bobyqa'))
 summary(m1, correlation = FALSE)
 saveRDS(m1, here::here('output', 'm1.RDS'))
@@ -91,7 +91,7 @@ rm(d4, d5, m1_follow_neutral, m1_follow_gain, m1_follow_loss)
 # Does magnitude make a difference?
 
 # model 2 -  magnitude instead of valence
-m2 <- glmer(accept ~ deg_skew  * magnitude + (1 | ID), data = d1, family = binomial(link = logit), nAGQ = 1, 
+m2 <- glmer(accept ~ deg_skew  * magnitude + (1 | ID), data = d1, family = binomial(link = "logit"), nAGQ = 1, 
               control=glmerControl(optimizer='bobyqa'))
 summary(m2, correlation = FALSE)
 saveRDS(m2, here::here('output', 'm2.RDS'))
@@ -113,7 +113,7 @@ list.save(m2_follow_large, here::here('output', 'm2_follow_largemag.rds'))
 rm(d6, d7, m2_follow_zero, m2_follow_small, m2_follow_large)
 
 # model 3 - interaction between mag and val
-m3 <- glmer(accept ~ deg_skew * magval + (1 | ID), data = d1, family = binomial(link = logit), nAGQ = 1, 
+m3 <- glmer(accept ~ deg_skew * magval + (1 | ID), data = d1, family = binomial(link = "logit"), nAGQ = 1, 
             control=glmerControl(optimizer='bobyqa'))
 summary(m3, correlation = FALSE)
 saveRDS(m3, here::here('output', 'm3.RDS'))
@@ -143,7 +143,7 @@ list.save(m3_follow_gain_05, here::here('output', 'm3_follow_gain_5.rds'))
 rm(d8, d9, m3_follow_neutral_0, m3_follow_loss_5, m3_follow_loss_05, m3_follow_gain_5, m3_follow_gain_05)
 
 # model 4 - add Age
-m4 <- glmer(accept ~ deg_skew * magval + Age + (1 | ID), data = d1, family = binomial(link = logit), nAGQ = 1, 
+m4 <- glmer(accept ~ deg_skew * magval + Age + (1 | ID), data = d1, family = binomial(link = "logit"), nAGQ = 1, 
             control=glmerControl(optimizer='bobyqa'))
 summary(m4, correlation = FALSE)
 saveRDS(m4, here::here('output', 'm4.RDS'))
@@ -152,7 +152,8 @@ saveRDS(m4, here::here('output', 'm4.RDS'))
 anova(m3,m4)
 
 # Create table for manuscript
-tab_model(b1, m1, m2, m3, m4)
+tab_model(b1, m1, m2, m3, m4, file = "study1table.doc")
+write.table(t1, "t1.txt")
 
 t1 <- matrix(nrow=15,ncol=7)
 t1[1,]<- c('', '', 'Baseline', 'Model 1', 'Model 2', 'Model 3', 'Model 4')

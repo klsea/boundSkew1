@@ -1,5 +1,6 @@
 # Aging Follow-Up Analysis
 # 4.3.20 KLS
+# 10.2.23 CCF
 
 # load required packages
 library(here)
@@ -7,6 +8,7 @@ library(lme4)
 library(gdata)
 library(tidyr)
 library(rlist)
+library(sjPlot)
 
 # load source functions
 source(here::here('scr', 'isolate_skew.R'))
@@ -49,22 +51,17 @@ ev0_hist_age <- hist(d2[which(d2$deg_skew == 'Symmetric'),]$Age) # limits to one
 # scale and center age
 d2$Age <- scale(d2$Age)
 
-# baseline - only degree of skew
-b1 <- glmer(accept ~ deg_skew + (1 + Age | ID), data = d1, family = binomial(link = logit), nAGQ = 1, 
-            control=glmerControl(optimizer='bobyqa'))
-# model doesn't converge
-#summary(b1, correlation = FALSE)
-
-## boundary fit - remove age from random effects
-b1.1 <- glmer(accept ~ deg_skew + (1 | ID), data = d2, family = binomial(link = logit), nAGQ = 1, 
+## boundary fit - subsample of participants with EV = 0 (similar to previous aging skew studies) remove age from random effects, baseline model
+b1.1 <- glmer(accept ~ deg_skew + (1 | ID), data = d2, family = binomial(link = "logit"), nAGQ = 1, 
               control=glmerControl(optimizer='bobyqa'))
 summary(b1.1, correlation = FALSE)
 #saveRDS(b1.1, here::here('output', 'baseline.RDS'))
 
-## boundary fit - add age 
-m1 <- glmer(accept ~ deg_skew * Age + (1 | ID), data = d2, family = binomial(link = logit), nAGQ = 1, 
+## boundary fit - subsample of participants with EV = 0 (similar to previous aging skew studies) baseline model + age as predictor and age by skew interaction 
+m1 <- glmer(accept ~ deg_skew * Age + (1 | ID), data = d2, family = binomial(link = "logit"), nAGQ = 1, 
               control=glmerControl(optimizer='bobyqa'))
 summary(m1, correlation = FALSE)
+tab_model(m1)
 
 # compare symmetric to 25%/75% gamble
 d3 <- d2[which(d2$gamble == 'X0_25_75'),]
@@ -72,4 +69,22 @@ d4 <- d2[which(d2$gamble == 'X0_50_50'),]
 
 t.test(d3$response, d4$response, paired = TRUE)
 
+##age exploratory models
+#age model 1: just age
+am1 <- glmer(accept ~ Age + (1 | ID), data = d1, family = binomial(link = "logit"), nAGQ = 1, 
+             control=glmerControl(optimizer='bobyqa'))
+summary(am1, correlation = FALSE)
+tab_model(am1)
+
+#age model 2: age and degree of skewness, no interaction
+am2 <- glmer(accept ~ deg_skew + Age + (1 | ID), data = d1, family = binomial(link = "logit"), nAGQ = 1, 
+            control=glmerControl(optimizer='bobyqa'))
+summary(am2, correlation = FALSE)
+tab_model(b3)
+
+#age model 3: age and degree of skewness, no interaction
+am3 <- glmer(accept ~ deg_skew * Age + (1 | ID), data = d1, family = binomial(link = "logit"), nAGQ = 1, 
+             control=glmerControl(optimizer='bobyqa'))
+summary(am3, correlation = FALSE)
+tab_model(am3)
 
