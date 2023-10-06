@@ -8,15 +8,15 @@ library(matrixStats)
 library(tidyr)
 
 # load source functions
-source(here('scr', 'isolate_skew.R'))
-source(here('scr', 'multiplot.R'))
-source(here('scr', 'colorize_variable.R'))
-source(here('scr', 'SummarySE.R'))
+source(here::here('scr', 'isolate_skew.R'))
+source(here::here('scr', 'multiplot.R'))
+source(here::here('scr', 'colorize_variable.R'))
+source(here::here('scr', 'SummarySE.R'))
 
 # set hard-coded variables
 
 # load data
-dt <- read.csv(here("data", "bound_skew1_data.csv"))
+dt <- read.csv(here::here("data", "bound_skew1_data.csv"))
 
 # separate strategy
 d0 <- isolate_skew(dt,c(1,2),70:75)
